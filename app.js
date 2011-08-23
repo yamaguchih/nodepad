@@ -55,20 +55,20 @@ app.get('/', function(req, res){
 
 // :format can be json of html
 app.get('/documents.:format?', function(req, res) {
-		// Some kind of Mongo query/update
-		Document.find().all(function(documents) {
-				switch (req.query.format) {
-						// When json, generate suitable data
-						case 'json':
-							res.send(documents.map(function(d) {
-									return d.toJSON;
-							}));
-						break;
-						// Else render a database template
-            			default:
-							res.render('documents/index.jade', {
-								locals: { documents: documents }
-							});
+	// Some kind of Mongo query/update
+	Document.find().all(function(documents) {
+		switch (req.query.format) {
+			// When json, generate suitable data
+			case 'json':
+				res.send(documents.map(function(d) {
+					return d.toJSON;
+				}));
+				break;
+			// Else render a database template
+  			default:
+				res.render('documents/index.jade', {
+					locals: { documents: documents }
+					});
 				}
 		});
 });
@@ -89,21 +89,17 @@ app.get('/documents/new', function(req, res) {
 
 // POST
 app.post('/documents.:format?', function(req, res) {
-		var document = new Document(req.body['document']);
-		document.save(function() {
-				switch (req.query.format) {
-						case 'json':
-							res.send(document.toJSON);
-						break;
-
-						default:
-							res.redirect('/documents');
-				}
-		});
+	var document = new Document(req.body['document']);
+	document.save(function() {
+		switch (req.query.format) {
+			case 'json':
+				res.send(document.toJSON);
+				break;
+			default:
+				res.redirect('/documents');
+		}
+	});
 })
-
-
-
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
